@@ -76,3 +76,4 @@ driver.find_element(by=By.XPATH, value='//*[@id="dialog_xsertcj_ok"]').click()
 # driver.find_element(by=By.ID, value='2D').click()
 ```
 
+博客：https://blog.csdn.net/m0_57110410/article/details/126257160

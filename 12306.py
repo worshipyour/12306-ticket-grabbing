@@ -151,6 +151,7 @@ def get_ticket(conf, driver, url):
                 ticket.find_element(by=By.XPATH, value='//*[@id="qr_submit_id"]').click()
                 print(f"{conf.trainnumber}次列车 从{start_station}-->{arrival_station} 抢票成功，请尽快在10分钟内支付！")
                 return
+        print(f"抱歉，没有找到车次为{conf.trainnumber}，出发站为{conf.fromstation}，到达站为{conf.destination}的车票！")
 
 
 if __name__ == '__main__':
