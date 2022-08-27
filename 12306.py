@@ -19,14 +19,13 @@ import time
 #         return flag
 
 
+# 判断预订按钮是否存在
 def isElementExist(driver):
     flag=True
     ele = driver.find_elements(by=By.CLASS_NAME, value='btn72')
     if len(ele) == 0:
         flag = False
         return flag
-    # if len(ele) >= 1:
-    #     return flag
     else:
         return flag
 
@@ -58,13 +57,14 @@ def get_ticket(conf, driver, url):
     picture_start = driver.find_element(by=By.ID, value='nc_1_n1z')
     # 移动到相应的位置，并左键鼠标按住往右边拖
     ActionChains(driver).move_to_element(picture_start).click_and_hold(picture_start).move_by_offset(300, 0).release().perform()
-    '''
 
+    '''
     # 扫码登录
     scan_QR = driver.find_element(by=By.XPATH, value='//*[@id="toolbar_Div"]/div[2]/div[2]/ul/li[2]/a')
     scan_QR.click()
     driver.implicitly_wait(30)
     '''
+
     # 点提示框
     driver.find_element(by=By.XPATH, value='//div[@class="dzp-confirm"]/div[2]/div[3]/a').click()
     driver.implicitly_wait(5)
@@ -143,12 +143,15 @@ def get_ticket(conf, driver, url):
                 # driver.find_element(by=By.XPATH, value='//*[@id="dialog_xsertcj_ok"]').click()
                 # 提交订单
                 driver.find_element(by=By.XPATH, value='//*[@id="submitOrder_id"]').click()
-                # 选座  F座
-                # driver.find_element(by=By.ID, value='1F').click()
-                # 第二个人选座
-                # driver.find_element(by=By.ID, value='2D').click()
+                # 等待1秒，才能获取座位（最好不要删掉，否则好像选座会出问题）
+                # time.sleep(1)
+                # 选座  A座：'1A'，B座：'1B'，C座：'1C'，D座：'1D'，E座：'1E'，F座:'1F'
+                # driver.execute_script('document.getElementById("1F").click()')
+                # print("选座成功！")
+                # 第二个人选座  A座：'2A'，B座：'2B'，C座：'2C'，D座：'2D'，E座：'2E'，F座:'2F'                # 要选座请使用下面这行代码
+                # driver.execute_script('document.getElementById("2D").click()')
                 # 确认提交订单
-                ticket.find_element(by=By.XPATH, value='//*[@id="qr_submit_id"]').click()
+                driver.find_element(by=By.XPATH, value='//*[@id="qr_submit_id"]').click()
                 print(f"{conf.trainnumber}次列车 从{start_station}-->{arrival_station} 抢票成功，请尽快在10分钟内支付！")
                 return
         print(f"抱歉，没有找到车次为{conf.trainnumber}，出发站为{conf.fromstation}，到达站为{conf.destination}的车票！")
@@ -166,5 +169,6 @@ if __name__ == '__main__':
     s = Service('./chromedriver.exe')
     driver = webdriver.Chrome(service=s)
     get_ticket(conf, driver, url)
-    time.sleep(10)
-    driver.quit()
+    # 执行完购票任务后30秒关闭浏览器，不想自动关闭浏览器或者想手动关闭的话可以注释掉下面两行
+    # time.sleep(30)
+    # driver.quit()

@@ -39,7 +39,7 @@ class Config:
 
 
 
-程序默认抢的是硬卧，如果要抢其他类型的车票例如硬座请修改`value=//td[8]`为`value=//td[10]`
+程序默认抢的是硬卧（使用硬卧是否为候补来判断是否有票），如果要抢其他类型的车票例如硬座请修改`value=//td[8]`为`value=//td[10]`
 
 并且该段代码能保证即使同一车次的列车既经过郑州，又经过郑州西，选出来的车票仍是唯一的你想要的那张
 
@@ -67,7 +67,9 @@ driver.find_element(by=By.XPATH, value='//*[@id="dialog_xsertcj_ok"]').click()
 # driver.find_element(by=By.XPATH, value='//*[@id="dialog_xsertcj_ok"]').click()
 ```
 
-如果抢的是硬座就需要选座，把注释解开即可
+<font color="red">12306的系统只支持支持C、D、G字头的动车组列车选座</font>
+
+如果抢的是硬座并想要选座，把注释解开即可（由于12306网站规则变化，该方法已不能成功选座了，代码中已删除）
 
 ```python
 # 选座  F座
@@ -75,5 +77,18 @@ driver.find_element(by=By.XPATH, value='//*[@id="dialog_xsertcj_ok"]').click()
 # 第二个人选座
 # driver.find_element(by=By.ID, value='2D').click()
 ```
+
+要想选座，可以解开下面代码的注释
+
+```python
+# 等待1秒，才能获取座位（最好不要删掉，否则好像选座会出问题）
+# time.sleep(1)
+# 选座  A座：'1A'，B座：'1B'，C座：'1C'，D座：'1D'，E座：'1E'，F座:'1F'
+# driver.execute_script('document.getElementById("1F").click()')
+# 第二个人选座  A座：'2A'，B座：'2B'，C座：'2C'，D座：'2D'，E座：'2E'，F座:'2F'
+# driver.execute_script('document.getElementById("1F").click()')
+```
+
+
 
 博客：https://blog.csdn.net/m0_57110410/article/details/126257160
