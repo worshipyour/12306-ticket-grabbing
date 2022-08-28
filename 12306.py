@@ -22,6 +22,7 @@ import time
 # 判断预订按钮是否存在
 def isElementExist(driver):
     flag=True
+    time.sleep(0.5)
     ele = driver.find_elements(by=By.CLASS_NAME, value='btn72')
     # print(ele)
     # 最近12306改动了，即使是预售的票他也会出现一个btn72类名，但不是在查询票的页面中，所以减去就好了
