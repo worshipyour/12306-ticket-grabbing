@@ -23,7 +23,9 @@ import time
 def isElementExist(driver):
     flag=True
     ele = driver.find_elements(by=By.CLASS_NAME, value='btn72')
-    if len(ele) == 0:
+    # print(ele)
+    # 最近12306改动了，即使是预售的票他也会出现一个btn72类名，但不是在查询票的页面中，所以减去就好了
+    if len(ele) - 1 == 0:
         flag = False
         return flag
     else:
