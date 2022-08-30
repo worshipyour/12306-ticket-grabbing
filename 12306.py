@@ -115,6 +115,8 @@ def get_ticket(conf, driver, url):
             # 每隔两分钟刷新一次，否则3分钟内无购票操作12306系统会自动登出
             if time.time() - start >= 120:
                 driver.refresh()
+                # 网页刷新过后要重新定位按钮，否则会报元素过期的错误
+                query_tag = driver.find_element(by=By.XPATH, value='//*[@id="query_ticket"]')
                 start = time.time()
             # 延时1秒防止过于快速地点击导致查询超时，当然偶尔还是会出现超时现象，不过超时也没关系，一般等待6秒之后就会继续自动查询
             time.sleep(1)
@@ -131,7 +133,7 @@ def get_ticket(conf, driver, url):
             arrival_station = str(ticket.text).replace("复\n", "").replace("智\n", "").split('\n')[2]
             # 如果车票的车次等于想要的车次并且车票的出发站等于您的出发站，到达站等于您的到达站并且硬卧的状态不是候补则点击预订，这样可使得车票唯一
             # value = '//td[2]'表示商务座特等座，'//td[3]'表示一等座，'//td[4]'表示二等座，'//td[5]'表示高级软卧，'//td[6]'表示软卧 ，'//td[7]'表示动卧，'//td[8]'表示硬卧，'//td[9]'表示软座，td[10]表示硬座
-            if ticket.find_element(by=By.CLASS_NAME,value='number').text == conf.trainnumber and start_station == conf.fromstation and arrival_station == conf.destination and ticket.find_element(by=By.XPATH, value='//td[8]').text != "候补":
+            if ticket.find_element(by=By.CLASS_NAME,value='number').text == conf.trainnumber and start_station == conf.fromstation and arrival_station == conf.destination and ticket.find_element(by=By.XPATH, value='//td[8]').text == "有":
                 # 点击预订
                 ticket.find_element(by=By.CLASS_NAME, value='btn72').click()
                 # 这里之后就不能继续使用ticket.find_element()了，因为页面进行了跳转，会出现stale element reference: element is not attached to the page document的错误
